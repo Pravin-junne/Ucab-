@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useEffect } from "react";
-import { gsap } from "gsap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
 
 import HomePage from "./pages/HomePage";
@@ -18,25 +17,8 @@ import DriverDashboardPage from "./pages/DriverDashboardPage";
 
 function App() {
 
-  useEffect(() => {
-
-    gsap.from(".ucab-main", {
-      opacity: 0,
-      y: 20,
-      duration: 0.6,
-      ease: "power2.out"
-    });
-
-  }, []);
-
   const token = localStorage.getItem("ucab_token");
   const currentUser = JSON.parse(localStorage.getItem("ucab_user") || "{}");
-
-  const handleLogout = () => {
-    localStorage.removeItem("ucab_token");
-    localStorage.removeItem("ucab_user");
-    window.location.href = "/";
-  };
 
   return (
     <Router>
@@ -45,7 +27,7 @@ function App() {
 
         {/* Navbar */}
 
-        <nav className="navbar navbar-expand-lg navbar-dark ucab-nav-blur shadow-sm">
+        <nav className="navbar navbar-expand navbar-dark ucab-nav-blur shadow-sm">
 
           <div className="container">
 
@@ -53,63 +35,32 @@ function App() {
               🚕 UCab
             </Link>
 
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#ucabNavbar"
-            >
-              <span className="navbar-toggler-icon" />
-            </button>
+            <ul className="navbar-nav ms-auto align-items-center">
 
-            <div className="collapse navbar-collapse" id="ucabNavbar">
+              {token && currentUser?.role !== "driver" && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/bookings">
+                    Book Ride
+                  </Link>
+                </li>
+              )}
 
-              <ul className="navbar-nav ms-auto align-items-center">
-
-                {/* Rider-only links */}
-                {token && currentUser?.role !== "driver" && (
+              {!token && (
+                <>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/bookings">
-                      Book Ride
+                    <Link className="nav-link" to="/login">
+                      Login
                     </Link>
                   </li>
-                )}
-
-                {/* Driver-only links */}
-                {token && currentUser?.role === "driver" && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/driver-dashboard">
-                      Dashboard
+                    <Link className="nav-link" to="/register">
+                      Register
                     </Link>
                   </li>
-                )}
+                </>
+              )}
 
-                {!token && (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/login">
-                        Login
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/register">
-                        Register
-                      </Link>
-                    </li>
-                  </>
-                )}
-
-                {token && (
-                  <li className="nav-item">
-                    <button className="btn btn-sm btn-danger ms-2" onClick={handleLogout}>
-                      Logout
-                    </button>
-                  </li>
-                )}
-
-              </ul>
-
-            </div>
+            </ul>
 
           </div>
 
