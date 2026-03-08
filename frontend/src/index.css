@@ -2,70 +2,48 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #f8f9fa;
-  background-color: #060b10;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Navy blue accent */
+  --bs-primary: #4f83cc;
+  --bs-primary-rgb: 79, 131, 204;
+  --ucab-primary: #4f83cc;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #0f172a 0, #1e293b 50%, #0b1120 100%);
+  background-color: #0d1117;
 }
 
 a {
   font-weight: 500;
-  color: #4da3ff;
+  color: #4f83cc;
   text-decoration: none;
 }
 
 a:hover {
-  color: #82c4ff;
-}
-
-/* Ensure navbar links are clearly visible on dark header */
-.navbar-dark .navbar-brand,
-.navbar-dark .navbar-nav .nav-link {
-  color: #f9fafb !important;
-}
-
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
-  color: #e5e7eb !important;
+  color: #7aa7e0;
 }
 
 .form-control,
 .form-select {
-  border-radius: 0.75rem;
-  background-color: #020617;
-  border: 1px solid #4b5563;
-  color: #f9fafb;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
-}
-
-.form-control::placeholder,
-.form-select::placeholder {
-  color: #6b7280;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-control:focus,
 .form-select:focus {
-  background-color: #020617;
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 1px #60a5fa;
+  border-color: #4f83cc;
+  box-shadow: 0 0 0 0.25rem rgba(79, 131, 204, 0.25);
   outline: none;
-  transform: translateY(-1px);
 }
 
 .btn {
-  border-radius: 0.75rem;
-}
-
-.form-label {
-  color: #e5e7eb;
+  border-radius: 0.5rem;
 }
 
 .table {
@@ -75,8 +53,25 @@ a:hover {
 
 .text-muted-sm {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: #8b949e;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* Vehicle type selector cards */
+.vehicle-card {
+  background-color: #0f3460;
+  border: 2px solid #1a4a7a !important;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.vehicle-card:hover {
+  background-color: #2d3748;
+  border-color: #4a5568 !important;
+}
+
+.vehicle-card.selected {
+  background-color: #1a4a8a;
+  border-color: #4f83cc !important;
+  box-shadow: 0 0 0 2px rgba(79, 131, 204, 0.4);
+}

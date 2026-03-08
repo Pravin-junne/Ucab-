@@ -346,8 +346,7 @@ function BookingsPage() {
             return (
               <div
                 key={type}
-                className={`d-flex align-items-center justify-content-between p-3 border rounded ${isSelected ? "border-primary bg-primary text-white" : "bg-light"}`}
-                style={{ cursor: "pointer", transition: "all 0.15s" }}
+                className={`d-flex align-items-center justify-content-between p-3 rounded vehicle-card${isSelected ? " selected" : ""}`}
                 onClick={() => setVehicle(type)}
               >
                 <div className="d-flex align-items-center gap-3">
