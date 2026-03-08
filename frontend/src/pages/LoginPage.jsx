@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -11,13 +13,35 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', form);
-      localStorage.setItem('ucab_token', res.data.token);
-      setMessage('Logged in successfully! You can now book rides, make payments and raise support.');
+
+      const { token, user } = res.data;
+
+      // Save token and user info
+      localStorage.setItem('ucab_token', token);
+      localStorage.setItem('ucab_user', JSON.stringify(user));
+
+      Swal.fire({
+        title: 'Login Successful',
+        text: `Welcome back, ${user.name}!`,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        if (user.role === 'driver') {
+          navigate('/driver-dashboard');
+        } else {
+          navigate('/bookings');
+        }
+      });
+
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Login failed');
+      Swal.fire({
+        title: 'Login Failed',
+        text: error.response?.data?.message || 'Invalid email or password',
+        icon: 'error'
+      });
     }
   };
 
@@ -27,10 +51,14 @@ function LoginPage() {
         <div className="ucab-card card">
           <div className="ucab-card-header card-header">
             <h2 className="ucab-section-title mb-1">Welcome back</h2>
-            <p className="mb-0 text-muted-sm">Sign in to continue booking rides with Ucab.</p>
+            <p className="mb-0 text-muted-sm">
+              Sign in to continue with UCab.
+            </p>
           </div>
+
           <div className="card-body">
             <form onSubmit={handleSubmit} className="d-grid gap-3">
+
               <div>
                 <label className="form-label">Email</label>
                 <input
@@ -43,6 +71,7 @@ function LoginPage() {
                   placeholder="you@example.com"
                 />
               </div>
+
               <div>
                 <label className="form-label">Password</label>
                 <input
@@ -52,14 +81,25 @@ function LoginPage() {
                   value={form.password}
                   onChange={handleChange}
                   required
-                  placeholder="••••••••"
+                  placeholder="Enter password"
                 />
               </div>
+
               <button type="submit" className="btn btn-primary w-100">
                 Login
               </button>
+
+              <p className="text-center text-muted-sm mb-0">
+                Don't have an account?{" "}
+                <span
+                  style={{ cursor: "pointer", color: "var(--ucab-primary)" }}
+                  onClick={() => navigate("/register")}
+                >
+                  Register
+                </span>
+              </p>
+
             </form>
-            {message && <p className="mt-3 text-muted-sm">{message}</p>}
           </div>
         </div>
       </div>
@@ -68,4 +108,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
